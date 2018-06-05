@@ -8,28 +8,28 @@
 
 makeCacheMatrix <- function(x = matrix()) {
   
-  m <- NULL
-  #  setting the mean to NULL as a placeholder for a future value. This also clears m. 
+  inv <- NULL
+  #  setting the inverse to NULL as a placeholder for a future value. This also clears inv. 
   
   set <- function(y) {
     x <<- y
-    m <<- NULL
+    inv <<- NULL
   }
   # This step defines the function to get the value of the matrix. 
-  # We are setting the vector "x" to a new vector, "y" and reset the mean "m" to NULL.
+  # We are setting the vector "x" to a new vector, "y" and reset the inverse "inv" to NULL.
   
   get <- function() x
   # this returns the vector x
   
-  setmean <- function(mean) m <<- mean
-  # this sets the mean (this is m) 
+  setInverse <- function(inverse) inv <<- inverse
+  # this sets the inverse (this is inv) 
   
-  getmean <- function() m
-  # this returns the mean m
+  getInverse <- function() inv
+  # this returns the inverse
   
   list(set = set, get = get,
-       setmean = setmean,
-       getmean = getmean)
+       setInverse = setInverse,
+       getInverse = getInverse)
 }
 # this returns the special vector that contains all these functions.
 
@@ -39,20 +39,20 @@ makeCacheMatrix <- function(x = matrix()) {
 ## then the cachesolve should retrieve the inverse from the cache
 
 cacheSolve <- function(x, ...) {
-  m <- x$getInverse()
-  if(!is.null(m)) { # if the cache is emppty, take the following steps:
+  inv <- x$getInverse()
+  if(!is.null(inv)) { # if the cache is emppty, take the following steps:
     message("getting cached data")
-    return(m)
+    return(inv)
 }
-data <- x$get() 
+mat <- x$get() 
 # get the value of the matrix
 
-m <- solve(data) 
+inv <- solve(mat, ...) 
 # calculate the inverse and store this result in m
 
-x$setInverse(m)
+x$setInverse(inv)
 # cache the result
 
-m
+inv
 # return the inverse 
 }
